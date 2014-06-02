@@ -17,8 +17,11 @@ end
   end
 end
 
-gem_package 'fog' do
-  only_if{ node[:chef_server_populator][:backup][:remote][:connection] }
+%w( nokogiri fog ).each do |gem|
+  gem_package gem do
+    version node[:chef_server_populator][gem]
+    only_if{ node[:chef_server_populator][:backup][:remote][:connection] }
+  end
 end
 
 template '/usr/local/bin/chef-server-backup' do

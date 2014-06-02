@@ -7,6 +7,9 @@ default[:chef_server_populator][:databag] = nil
 
 default[:chef_server_populator][:endpoint] = nil
 
+default[:chef_server_populator][:gem_versions][:nokogiri] = '1.6.1'
+default[:chef_server_populator][:gem_versions][:fog] = '1.22.1'
+
 # Deprecated in favor of endpoint
 default[:chef_server_populator][:servername_override] = nil
 
