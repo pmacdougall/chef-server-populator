@@ -17,9 +17,9 @@ end
   end
 end
 
-%w( nokogiri fog ).each do |gem|
-  gem_package gem do
-    version node[:chef_server_populator][gem]
+%w( nokogiri fog ).each do |gem_name|
+  gem_package gem_name do
+    version node[:chef_server_populator][:gem_versions][gem_name]
     only_if{ node[:chef_server_populator][:backup][:remote][:connection] }
   end
 end
