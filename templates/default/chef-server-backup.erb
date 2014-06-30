@@ -20,6 +20,7 @@ backup_db = system("/opt/chef-server/embedded/bin/pg_dump opscode_chef --usernam
 backup_data = system("tar -czf #{data_file} -C /var/opt/chef-server/bookshelf data")
  
 if backup_db && backup_data
+  <% if node[:chef_server_populator][:backup][:remote][:connection] -%>
    creds = <%= node[:chef_server_populator][:backup][:remote][:connection].symbolize_keys %>
    if(creds)
      require 'fog'
@@ -31,6 +32,7 @@ if backup_db && backup_data
        File.delete(file)
      end
    end
+   <% end -%>
 else
    $stderr.puts "Chef Server Backup Failed!"
    exit -1
