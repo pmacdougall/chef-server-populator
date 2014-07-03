@@ -3,7 +3,7 @@ include_recipe 'chef-server-populator::configurator'
 knife_cmd = "#{node[:chef_server_populator][:knife_exec]}"
 ssl_port = ''
 if node['chef-server']['configuration']['nginx']['ssl_port']
-  ssl_port = ":#[node['chef-server']['configuration']['nginx']['ssl_port']}"
+  ssl_port = ":#{node['chef-server']['configuration']['nginx']['ssl_port']}"
 end rescue NoMethodError 
 knife_opts = "-k #{node[:chef_server_populator][:pem]} " <<
   "-u #{node[:chef_server_populator][:user]} " <<
