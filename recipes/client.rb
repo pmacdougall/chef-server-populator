@@ -1,10 +1,12 @@
 include_recipe 'chef-server-populator::configurator'
 
 knife_cmd = "#{node[:chef_server_populator][:knife_exec]}"
+
 ssl_port = ''
 if node['chef-server']['configuration']['nginx']['ssl_port']
   ssl_port = ":#{node['chef-server']['configuration']['nginx']['ssl_port']}"
-end rescue NoMethodError 
+end rescue NoMethodError
+
 knife_opts = "-k #{node[:chef_server_populator][:pem]} " <<
   "-u #{node[:chef_server_populator][:user]} " <<
   "-s https://127.0.0.1#{ssl_port}"
@@ -20,7 +22,7 @@ if(node[:chef_server_populator][:databag])
       enabled = item['chef_server']['enabled']
       if(item['enabled'] == false)
         execute "delete client: #{client}" do
-          command "#{knife_cmd} client delete #{client} --admin -d #{knife_opts}"
+          command "#{knife_cmd} client delete #{client} -d #{knife_opts}"
           only_if "#{knife_cmd} client list #{knife_opts}| tr -d ' ' | grep '^#{client}$'"
         end
       else
