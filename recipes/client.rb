@@ -14,6 +14,10 @@ pg_cmd = "/opt/chef-server/embedded/bin/psql -d opscode_chef"
 
 if(node[:chef_server_populator][:databag])
   begin
+    execute 'wait for server' do
+      command "counter=1; until [ $counter -gt 10 ] || #{knife_cmd} client list #{knife_opts} > /dev/null 2>&1; do sleep 1; counter=$((counter+1)); do sleep 1; counter=$((counter+1)); done"
+      not_if "#{knife_cmd} client list #{knife_opts} > /dev/null 2>&1"
+    end
     data_bag(node[:chef_server_populator][:databag]).each do |item_id|
       item = data_bag_item(node[:chef_server_populator][:databag], item_id)
       next unless item['chef_server']
@@ -34,7 +38,7 @@ if(node[:chef_server_populator][:databag])
           execute "set public key for: #{client}" do
             command "#{pg_cmd} -c \"update clients set public_key = E'#{pub_key}' where name = '#{client}'\""
             user 'opscode-pgsql'
-            not_if "#{pg_cmd} -c \"select public_key from clients where name = '#{client}' and public_key = E'#{pub_key}'\" -tqa | grep #{client}"
+            not_if %Q(sudo -i -u opscode-pgsql #{pg_cmd} -c "select name from clients where name = '#{client}' and public_key = E'#{pub_key}'" -tq | tr -d ' ' | grep '^#{client}$')
           end
         end
       end
