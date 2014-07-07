@@ -17,7 +17,7 @@ if(node[:chef_server_populator][:databag])
     # during testing (with vagrant) the server will be started but not ready to respond to the knife client commands
     # this will sleep for a maximum of 10 seconds then carry on
     execute 'wait for server' do
-      command "counter=1; until [ $counter -gt 10 ] || #{knife_cmd} client list #{knife_opts} > /dev/null 2>&1; do sleep 1; counter=$((counter+1)); do sleep 1; counter=$((counter+1)); done"
+      command "counter=1; until [ $counter -gt 10 ] || #{knife_cmd} client list #{knife_opts} > /dev/null 2>&1; do sleep 1; counter=$((counter+1)); done"
       not_if "#{knife_cmd} client list #{knife_opts} > /dev/null 2>&1"
     end
     data_bag(node[:chef_server_populator][:databag]).each do |item_id|
