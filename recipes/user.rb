@@ -24,7 +24,7 @@ if node[:chef_server_populator][:user_databag]
       username = item['id']
       pub_key = item['chef_server']['public_key']
       enabled = item['chef_server']['enabled']
-puts "FINDME: #{pp item}"
+
       if enabled
         key_file = "#{Chef::Config[:file_cache_path]}/#{username}.pub"
         password = SecureRandom.urlsafe_base64(23)
