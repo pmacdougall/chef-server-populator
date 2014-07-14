@@ -14,7 +14,7 @@ knife_opts = "-k #{node[:chef_server_populator][:pem]} \
 if node[:chef_server_populator][:user_databag]
   begin
     execute 'wait for server' do
-      command "counter=1; until [ $counter -gt 10 ] || #{knife_cmd} client list #{knife_opts} > /dev/null 2>&1; do sleep 1; counter=$((counter+1)); do sleep 1; counter=$((counter+1)); done"
+      command "counter=1; until [ $counter -gt 10 ] || #{knife_cmd} client list #{knife_opts} > /dev/null 2>&1; do sleep 1; counter=$((counter+1)); done"
       not_if "#{knife_cmd} client list #{knife_opts} > /dev/null 2>&1"
     end
     require 'securerandom'
