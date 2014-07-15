@@ -35,6 +35,21 @@ Structure of the data bag item:
 }
 ```
 
+* `node[:chef_server_populator][:user_databag]` - name of the data bag containing users
+
+Structure of the data bag item:
+
+```json
+{
+  "id": "username",
+  "chef_server": {
+    "public_key": "public key contents",
+    "admin": true,
+    "enabled": true
+  }
+}
+```
+
 Restoring from a backup:
 
 * Set path to restore file with node[:chef_server_populator][:restore][:file]
